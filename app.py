@@ -16,7 +16,7 @@ HEADERS = {
 }
 
 PDF_FOLDER = "QuarterlyResultPdf"
-GEMINI_API_KEY = "YOUR_GEMINI_API_KEY"  # Set this as an environment variable in production
+GEMINI_API_KEY = "AIzaSyBbhY5dG1OgIzHwS5sK4TVvxS7pjFYyRQI"  # Set this as an environment variable in production
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
