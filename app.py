@@ -200,7 +200,7 @@ class ScreenerScraper:
                         "basic_eps": {"value": number, "unit": "INR"},
                         "diluted_eps": {"value": number, "unit": "INR"},
                     },
-                    "per_share_metrics": {
+                    "other_discloures": {
                         "operating_margin": {"value": number, "unit": "%"},
                         "net_margin": {"value": number, "unit": "%"}
                         "total_debt_to_asset_ratio": {"value": number, "unit": "%"},
