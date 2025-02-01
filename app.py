@@ -145,30 +145,38 @@ class ScreenerScraper:
             return
 
         try:
-            prompt = """Analyze this quarterly result PDF and extract the consolidated financial metrics from the section titled "STATEMENT OF CONSOLIDATED UNAUDITED FINANCIAL RESULTS FOR THE QUARTER" or similar consolidated results table.
+            prompt = """FIRST, analyze the entire document to determine if it represents a company's financial report. Check for:
+        - Sections titled "Financial Results", "Income Statement", "Balance Sheet" or similar
+        - Presence of financial tables with metrics like Revenue, Profit, Expenses
+        - Common financial terms (EBITDA, EPS, Assets, Liabilities, etc.)
+        - Numerical data with currency units
 
+        If the document DOES NOT contain financial results or appears unrelated to company financials, respond ONLY with: "The uploaded PDF does not appear to be a financial report."
+
+        ONLY IF financial content is confirmed, proceed with:
+        Analyze the quarterly result PDF and extract the consolidated financial metrics from the section titled "STATEMENT OF CONSOLIDATED UNAUDITED FINANCIAL RESULTS" for  Core Financial Performance
             Focus specifically on these financial metrics from the CONSOLIDATED table (not standalone):
             1. Core Financial Performance:
                - Total Revenue/Income from Operations
                - Total Income (including other income)
-               - Total Expenses
-               - EBITDA (Earnings Before Interest, Tax, Depreciation & Amortization)
-               - EBIT (Earnings Before Interest & Tax)
-               - Profit Before Tax (PBT)
-               - Tax Expenses
-               - Net Profit/Loss (Profit After Tax)
-               
-            2. Per Share & Margin Metrics:
+               - Total Expenses / Total Expenditure / Total Cost
+               - Total Tax Expense
+               - Profit/ (Loss) Before Tax (PBT)
+               - Net Profit/ (Loss) or (Profit After Tax)
                - Basic EPS
                - Diluted EPS
+            extract other diclourse releated data or metrics from the section titled "Other Disclosures - Consolidated" 
+            2. Other Disclosures
                - Operating Profit Margin (%)
                - Net Profit Margin (%)
-               
-            4. Balance Sheet Highlights:
+               - Debt equity ratio (in times)
+               - Total debts to total assets ratio (in %)
+               - Net Worth
+            extract balance releated data or metrics from the section titled "Consolidated Statement of Assets and Liabilities"   
+            3. Balance Sheet Highlights:
                - Total Assets
                - Total Liabilities
-               - Net Worth
-               - Debt
+               - Total Equity
                
             Important Instructions:
             1. ONLY extract data from the CONSOLIDATED financial results table
@@ -186,24 +194,17 @@ class ScreenerScraper:
                         "revenue": {"value": number, "unit": "string"},
                         "total_income": {"value": number, "unit": "string"},
                         "total_expenses": {"value": number, "unit": "string"},
-                        "ebitda": {"value": number, "unit": "string"},
-                        "ebit": {"value": number, "unit": "string"},
+                        "total_tax_expense": {"value": number, "unit": "string"},
                         "profit_before_tax": {"value": number, "unit": "string"},
-                        "tax_expenses": {"value": number, "unit": "string"},
                         "net_profit": {"value": number, "unit": "string"}
-                    },
-                    "per_share_metrics": {
                         "basic_eps": {"value": number, "unit": "INR"},
                         "diluted_eps": {"value": number, "unit": "INR"},
+                    },
+                    "per_share_metrics": {
                         "operating_margin": {"value": number, "unit": "%"},
                         "net_margin": {"value": number, "unit": "%"}
-                    },
-                    "key_components": {
-                        "raw_material_cost": {"value": number, "unit": "string"},
-                        "employee_benefits": {"value": number, "unit": "string"},
-                        "finance_costs": {"value": number, "unit": "string"},
-                        "depreciation": {"value": number, "unit": "string"},
-                        "other_expenses": {"value": number, "unit": "string"}
+                        "total_debt_to_asset_ratio": {"value": number, "unit": "%"},
+                        "debt_equity_ratio": {"value": number, "unit": "times"},
                     },
                     "balance_sheet": {
                         "total_assets": {"value": number, "unit": "string"},
